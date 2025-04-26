@@ -1,4 +1,4 @@
-# Sync Figma branches to Github issue
+# Sync Figma branches to GitHub issue
 
 Sync open Figma branches into a GitHub issue with Github Actions.
 
