@@ -32,7 +32,7 @@ You must have created an issue in your repo to print the table on it.
 
 Copy link from a project in Figma and use the number after `project/`, then use it in project-id field in the action. (check usage example section)
 
-For example: `https://www.figma.com/files/1556734703143062955/project/12345678`
+Example of project link: `https://www.figma.com/files/1556734703143062955/project/12345678`
 
 ## Usage example
 
