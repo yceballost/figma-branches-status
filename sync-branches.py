@@ -180,9 +180,11 @@ def update_github_issue(issue_number, repo_owner, repo_name, markdown_content, g
 figma_token = os.getenv("FIGMA_TOKEN")
 github_token = os.getenv("GITHUB_TOKEN")
 
-# GitHub repo details
-repo_owner = "Telefonica"
-repo_name = "mistica-design"
+repo_full = os.getenv("GITHUB_REPOSITORY")  # e.g. "owner/name"
+if repo_full and "/" in repo_full:
+    repo_owner, repo_name = repo_full.split("/", 1)
+else:
+    print("Invalid GITHUB_REPOSITORY format. Expected 'owner/name'.")
 
 # List of Figma project IDs
 project_id_env = os.getenv("PROJECT_ID")
