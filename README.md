@@ -6,7 +6,7 @@ In [Mística Design System](https://brandfactory.telefonica.com/mistica) we use 
 
 You can see our usage [here](https://github.com/Telefonica/mistica-design/issues/1927)
 
-The table is compose with 5 columns
+The table is composed by 5 columns
 
 1. File name
 2. Branch name
