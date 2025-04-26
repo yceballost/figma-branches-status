@@ -19,11 +19,12 @@ Including the issue number with # (#1234) in Figma branch name you can sync figm
 
 ## Inputs
 
-| Input          | Descripción                          |
-| -------------- | ------------------------------------ |
-| `figma-token`  | Token de acceso a la API de Figma.   |
-| `github-token` | Token de GitHub para repos privados. |
-| `project-id`   | Sync all files inside project        |
+| Input          | Descripción                                   |          |
+| -------------- | --------------------------------------------- | -------- |
+| `figma-token`  | Token de acceso a la API de Figma.            | required |
+| `github-token` | Token de GitHub para repos privados.          | required |
+| `project-id`   | Sync all files inside project                 | required |
+| `issue-number` | Choose the issue number where print the table | required |
 
 ### How to get project-id from Figma projects
 
