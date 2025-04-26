@@ -2,6 +2,7 @@ import requests
 import pandas as pd
 import os
 import re
+import sys
 from datetime import datetime, timezone
 from dotenv import load_dotenv
 
@@ -172,46 +173,73 @@ def update_github_issue(issue_number, repo_owner, repo_name, markdown_content, g
     response = requests.patch(url, json=data, headers=headers)
 
     if response.status_code == 200:
-        print("Issue updated successfully")
+        print(f"Issue #{issue_number} updated successfully")
     else:
-        print(f"Failed to update issue: {response.status_code} - {response.text}")
+        print(f"Failed to update issue #{issue_number}: {response.status_code} - {response.text}")
 
-# Main execution block
-def main():
-    # Personal access token for Figma and GitHub APIs
-    figma_token = os.getenv("FIGMA_TOKEN")
-    github_token = os.getenv("GITHUB_TOKEN")
+# Debug information
+print("Environment variables:")
+print(f"GITHUB_REPOSITORY: {os.getenv('GITHUB_REPOSITORY')}")
+print(f"PROJECT_ID: {os.getenv('PROJECT_ID')}")
+print(f"ISSUE_NUMBER: {os.getenv('ISSUE_NUMBER')}")
 
-    repo_full = os.getenv("GITHUB_REPOSITORY")  # e.g. "owner/name"
-    if repo_full and "/" in repo_full:
-        repo_owner, repo_name = repo_full.split("/", 1)
-    else:
-        print("Invalid GITHUB_REPOSITORY format. Expected 'owner/name'.")
-        return
+# Personal access token for Figma and GitHub APIs
+figma_token = os.getenv("FIGMA_TOKEN")
+if not figma_token:
+    print("Error: FIGMA_TOKEN environment variable is not set.")
+    sys.exit(1)
+    
+github_token = os.getenv("GITHUB_TOKEN")
+if not github_token:
+    print("Error: GITHUB_TOKEN environment variable is not set.")
+    sys.exit(1)
 
-    # List of Figma project IDs
-    project_id_env = os.getenv("PROJECT_ID")
-    if project_id_env:
-        project_ids = [pid.strip() for pid in project_id_env.split(",") if pid.strip()]
-    else:
-        print("No project ID provided in the environment variable PROJECT_ID.")
-        return
+repo_full = os.getenv("GITHUB_REPOSITORY")  # e.g. "owner/name"
+if repo_full and "/" in repo_full:
+    repo_owner, repo_name = repo_full.split("/", 1)
+else:
+    print("Error: Invalid GITHUB_REPOSITORY format. Expected 'owner/name'.")
+    sys.exit(1)
 
-    # Fetch all file keys from the specified Figma projects
-    file_keys = get_figma_project_files(project_ids, figma_token)
+# List of Figma project IDs
+project_id_env = os.getenv("PROJECT_ID")
+if not project_id_env:
+    print("Error: No project ID provided in the environment variable PROJECT_ID.")
+    sys.exit(1)
+    
+project_ids = [pid.strip() for pid in project_id_env.split(",") if pid.strip()]
+if not project_ids:
+    print("Error: No valid project IDs found after parsing PROJECT_ID.")
+    sys.exit(1)
+    
+print(f"Using project IDs: {project_ids}")
 
-    # Analyze the files and generate the table
-    df = analyze_files(file_keys, figma_token, repo_owner, repo_name, github_token)
+# Get issue number from environment variable (with fallback to default)
+issue_number_env = os.getenv("ISSUE_NUMBER", "1927")
+try:
+    issue_number = int(issue_number_env)
+    print(f"Using issue number: {issue_number}")
+except ValueError:
+    print(f"Error: Invalid issue number '{issue_number_env}'. Must be an integer.")
+    sys.exit(1)
 
+# Fetch all file keys from the specified Figma projects
+file_keys = get_figma_project_files(project_ids, figma_token)
+if not file_keys:
+    print("Warning: No files found in the specified projects.")
+    sys.exit(0)
+
+# Analyze the files and generate the table
+df = analyze_files(file_keys, figma_token, repo_owner, repo_name, github_token)
+if df.empty:
+    print("Warning: No data to display. The result table is empty.")
+    markdown_table = "No branches found in the specified Figma projects."
+else:
     # Convert the table to markdown format
     markdown_table = df.to_markdown(index=False)
 
-    # Update the issue on GitHub
-    issue_number = 1927  # Change this as needed
-    update_github_issue(issue_number, repo_owner, repo_name, markdown_table, github_token)
+# Update the issue on GitHub
+update_github_issue(issue_number, repo_owner, repo_name, markdown_table, github_token)
 
-    # Print the table to the console
-    print(markdown_table)
-
-if __name__ == "__main__":
-    main()
+# Print the table to the console
+print(markdown_table)
