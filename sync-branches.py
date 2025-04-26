@@ -176,35 +176,42 @@ def update_github_issue(issue_number, repo_owner, repo_name, markdown_content, g
     else:
         print(f"Failed to update issue: {response.status_code} - {response.text}")
 
-# Personal access token for Figma and GitHub APIs
-figma_token = os.getenv("FIGMA_TOKEN")
-github_token = os.getenv("GITHUB_TOKEN")
+# Main execution block
+def main():
+    # Personal access token for Figma and GitHub APIs
+    figma_token = os.getenv("FIGMA_TOKEN")
+    github_token = os.getenv("GITHUB_TOKEN")
 
-repo_full = os.getenv("GITHUB_REPOSITORY")  # e.g. "owner/name"
-if repo_full and "/" in repo_full:
-    repo_owner, repo_name = repo_full.split("/", 1)
-else:
-    print("Invalid GITHUB_REPOSITORY format. Expected 'owner/name'.")
+    repo_full = os.getenv("GITHUB_REPOSITORY")  # e.g. "owner/name"
+    if repo_full and "/" in repo_full:
+        repo_owner, repo_name = repo_full.split("/", 1)
+    else:
+        print("Invalid GITHUB_REPOSITORY format. Expected 'owner/name'.")
+        return
 
-# List of Figma project IDs
-project_id_env = os.getenv("PROJECT_ID")
-if project_id_env:
-    project_ids = [pid.strip() for pid in project_id_env.split(",") if pid.strip()]
-else:
-    print("No project ID provided in the environment variable PROJECT_ID.")
+    # List of Figma project IDs
+    project_id_env = os.getenv("PROJECT_ID")
+    if project_id_env:
+        project_ids = [pid.strip() for pid in project_id_env.split(",") if pid.strip()]
+    else:
+        print("No project ID provided in the environment variable PROJECT_ID.")
+        return
 
-# Fetch all file keys from the specified Figma projects
-file_keys = get_figma_project_files(project_id, figma_token)
+    # Fetch all file keys from the specified Figma projects
+    file_keys = get_figma_project_files(project_ids, figma_token)
 
-# Analyze the files and generate the table
-df = analyze_files(file_keys, figma_token, repo_owner, repo_name, github_token)
+    # Analyze the files and generate the table
+    df = analyze_files(file_keys, figma_token, repo_owner, repo_name, github_token)
 
-# Convert the table to markdown format
-markdown_table = df.to_markdown(index=False)
+    # Convert the table to markdown format
+    markdown_table = df.to_markdown(index=False)
 
-# Update the issue on GitHub
-issue_number = 1927  # Change this as needed
-update_github_issue(issue_number, repo_owner, repo_name, markdown_table, github_token)
+    # Update the issue on GitHub
+    issue_number = 1927  # Change this as needed
+    update_github_issue(issue_number, repo_owner, repo_name, markdown_table, github_token)
 
-# Print the table to the console
-print(markdown_table)
+    # Print the table to the console
+    print(markdown_table)
+
+if __name__ == "__main__":
+    main()

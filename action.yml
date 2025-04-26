@@ -31,9 +31,14 @@ runs:
       run: |
         pip install requests pandas tabulate python-dotenv
 
+    - name: Copy script to workspace
+      shell: bash
+      run: |
+        cp "$GITHUB_ACTION_PATH/sync-branches.py" .
+
     - name: Run branch sync
       shell: bash
-      run: python3 "$GITHUB_ACTION_PATH/sync-branches.py"
+      run: python3 sync-branches.py
       env:
         FIGMA_TOKEN: ${{ inputs.figma-token }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
