@@ -50,6 +50,6 @@ jobs:
         with:
           figma-token: ${{ secrets.FIGMA_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          project-ids: "12345678,87654321"
+          project-ids: "12345678, 87654321"
           issue-number: "1"
 ```
