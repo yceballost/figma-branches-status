@@ -189,8 +189,7 @@ else:
 # List of Figma project IDs
 project_id_env = os.getenv("PROJECT_ID")
 if project_id_env:
-    # Split comma-separated string into a list of ID
-    project_id = [pid.strip() for pid in project_id_env.split(",") if pid.strip()]
+    project_ids = [pid.strip() for pid in project_id_env.split(",") if pid.strip()]
 else:
     print("No project ID provided in the environment variable PROJECT_ID.")
 
