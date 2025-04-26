@@ -33,8 +33,7 @@ runs:
 
     - name: Run branch sync
       shell: bash
-      working-directory: ./
-      run: python3 sync-branches.py
+      run: python3 "$GITHUB_ACTION_PATH/sync-branches.py"
       env:
         FIGMA_TOKEN: ${{ inputs.figma-token }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
