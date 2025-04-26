@@ -1,0 +1,39 @@
+name: "Figma branches status"
+description: "Sync open Figma branches into a GitHub issue."
+author: "Ignacio Ceballos <yceballost@gmail.com>"
+
+inputs:
+  figma-token:
+    description: "Figma API token."
+    required: true
+  github-token:
+    description: "GitHub token to access repos."
+    required: true
+  project-id:
+    description: "Comma-separated list of Figma project IDs."
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python environment
+      uses: actions/setup-python@v2
+      with:
+        python-version: "3.x"
+
+    - name: Install dependencies
+      shell: bash
+      run: |
+        pip install requests pandas tabulate python-dotenv
+
+    - name: Run branch sync
+      shell: bash
+      working-directory: ./
+      run: python3 sync-branches.py
+      env:
+        FIGMA_TOKEN: ${{ inputs.figma-token }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+        PROJECT_ID: ${{ inputs.project-id }}
