@@ -1,6 +1,8 @@
 name: "Figma branches status"
 description: "Sync open Figma branches into a GitHub issue."
 author: "Ignacio Ceballos <yceballost@gmail.com>"
+icon: table
+color: blue
 
 inputs:
   figma-token:
