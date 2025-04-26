@@ -26,6 +26,8 @@ Including the issue number with # (#1234) in Figma branch name you can sync figm
 | `project-id`   | Sync all files inside project                 | required |
 | `issue-number` | Choose the issue number where print the table | required |
 
+You must have created an issue in your repo to print the table on it.
+
 ### How to get project-id from Figma projects
 
 Copy link from a project in Figma and use the number after `project/` and use it in project-id field in the action. (check usage example section)
@@ -37,6 +39,7 @@ For example: `https://www.figma.com/files/1556734703143062955/project/12345678`
 ```yaml
 name: Sync branches daily
 on:
+  workflow_dispatch:
   schedule:
     - cron: "0 8 * * *"
 jobs:
@@ -48,4 +51,5 @@ jobs:
           figma-token: ${{ secrets.FIGMA_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           project-ids: "12345678,87654321"
+          issue-number: "1"
 ```
