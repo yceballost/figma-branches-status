@@ -37,13 +37,13 @@ For example: `https://www.figma.com/files/1556734703143062955/project/12345678`
 ## Usage example
 
 ```yaml
-name: Sync branches daily
+name: Figma branches status
 on:
   workflow_dispatch:
   schedule:
     - cron: "0 8 * * *"
 jobs:
-  sync:
+  sync-figma-branches:
     runs-on: ubuntu-latest
     steps:
       - uses: yceballost/figma-branches-status@v1
