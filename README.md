@@ -8,16 +8,14 @@ You can see our usage [here](https://github.com/Telefonica/mistica-design/issues
 
 The table is composed by 5 columns
 
-1. File name
-2. Branch name
-3. Issue related
-4. Status (from Github project)
-5. Last modification
+| File Name | Branch Names                                        | Issue | Status      | Last Modification |
+| :-------- | :-------------------------------------------------- | :---- | :---------- | :---------------- |
+| Filename  | [#1234 - Figma branch name ](https://www.figma.com) | #1234 | In progress | 1 d               |
 
 We follow a simple nomenclature to name branches:  
 `#0000 - Issue name`
 
-With this nomenclature in Figma branches you can sync figma branches with Github issues automatically
+Including the issue number with # (#1234) in Figma branch name you can sync figma branches with Github issues automatically
 
 ## Inputs
 
